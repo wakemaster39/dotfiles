@@ -21,6 +21,11 @@ git clone https://github.com/wakemaster39/dotfiles ~/.dotfiles
 cd ~/.dotfiles && ./install.sh
 ```
 
+If you want to adjust your macOS settings to be more sane:
+```
+cd ~/.dotfiles && ./.macos
+```
+
 Are you a Fan of Freedom? You may need to run in additon:
 ```
 cd ~/.dotfiles && ./freedom.sh
