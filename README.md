@@ -15,13 +15,13 @@ IMPORTANT: `cp Brewfile ../.Brewfile` if you want to customize the packages that
 
 ``` bash
 # Clone Repo to .dotfiles
-git clone https://github.com/rvalente/dotfiles.git ~/.dotfiles
+git clone https://github.com/wakemaster39/dotfiles ~/.dotfiles
 
 # Install Dotfiles
 cd ~/.dotfiles && ./install.sh
 ```
 
-Are you a Fan of Freedom? You may need to run om additon:
+Are you a Fan of Freedom? You may need to run in additon:
 ```
 cd ~/.dotfiles && ./freedom.sh
 ```
