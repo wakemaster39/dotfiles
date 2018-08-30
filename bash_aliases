@@ -1,5 +1,9 @@
 # ~/.bash_aliases
 
+alias ..="cd .."
+alias ...="cd ../../"
+alias ....="cd ../../../"
+
 # vim
 alias vi=vim
 
@@ -11,6 +15,17 @@ alias h=history
 alias ps='/bin/ps auxww'
 alias psg='/bin/ps auxww | grep'
 alias tf='tail -f'
+
+# Exa aliases
+alias exa="exa --git -l"
+
+# alias newer programs
+alias cat='bat'
+alias ping='prettyping --nolegend'
+alias preview="fzf --preview 'bat --color \"always\" {}'"
+export FZF_DEFAULT_OPTS="--bind='ctrl-o:execute(code {})+abort'"
+alias top="sudo htop" # alias top and fix high sierra bug:
+alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
 
 # Google Chrome
 alias chrome='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'

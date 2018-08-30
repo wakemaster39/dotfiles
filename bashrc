@@ -106,3 +106,5 @@ ulimit -c 0
 # Load Aliases
 [ -r ~/.bash_aliases ] && source ~/.bash_aliases
 
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

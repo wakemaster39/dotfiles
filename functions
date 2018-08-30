@@ -60,5 +60,9 @@ sizeup () {
 	echo $'\e[1;33;40m'"Total: "$'\e[1;32;40m'"$(__sizeup_humanize $totalb)"$'\e[1;33;40m'" in $counter files"$'\e[0m'
 }
 
+rgl() {
+  rg -p "$@" | less -XFRMK
+}
+
 # vim: ai ts=2 sw=2 et sts=2 ft=sh
 # vim: autoindent tabstop=2 shiftwidth=2 expandtab softtabstop=2 filetype=sh
