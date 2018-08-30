@@ -59,13 +59,22 @@ declare -a FILES_TO_SYMLINK=(
   'gitignore'
   'gitmessage'
   'inputrc'
-#   'vimrc'
+  'vimrc'
+  'ideavimrc'
 )
 
 # Symlink Dotfiles
 for file in "${FILES_TO_SYMLINK[@]}"; do
   sourceFile="$DOTFILES/$file"
   targetFile="$HOME/.$file"
+
+  if [ -f "$targetFile" ]; then
+     if [ ! -L "$targetFile" ]; then
+       mv "$targetFile" "$targetFile.old"
+     else
+       unlink "$targetFile"
+     fi
+  fi
 
   if [ ! -e "$targetFile" ]; then
     ln -sf "$sourceFile" "$targetFile"
