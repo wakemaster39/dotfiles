@@ -51,6 +51,7 @@ alias gs='git status -sb'
 alias ga='git add -A'
 alias gcv='git commit -v'
 alias gcm='git commit -m'
+alias gp="git pull origin \$(git rev-parse --abbrev-ref HEAD)"
 
 # macOS Specific Aliases
 alias brewu="brew update && brew upgrade && brew doctor && brew cleanup"
