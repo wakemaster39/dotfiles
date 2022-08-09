@@ -1,0 +1,7 @@
+alias ..="cd .."
+alias ...="cd ../../"
+alias ....="cd ../../../"
+
+# vim
+alias vi=nvim
+alias vim=nvim

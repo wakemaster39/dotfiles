@@ -45,22 +45,27 @@ brew bundle --file="$BREWFILE"
 
 # Set Newer Bash as Default Shell
 CURRENTSHELL=$(dscl . -read /Users/"$USER" UserShell | awk '{print $2}')
-if [[ "$CURRENTSHELL" != "/usr/local/bin/bash" ]]; then
-  sudo dscl . -change /Users/"$USER" UserShell "$SHELL" /usr/local/bin/bash > /dev/null 2>&1
+if [[ "$CURRENTSHELL" != "/opt/homebrew/bin/zsh" ]]; then
+  sudo dscl . -change /Users/"$USER" UserShell "$SHELL" /opt/homebrew/bin/zsh > /dev/null 2>&1
 fi
+
+# install poetry
+# curl -sSL https://install.python-poetry.org | python3 -
+
+# install oh-my-zsh
+# sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+rm -f $HOME/.zshrc
 
 # List of Dotfiles
 declare -a FILES_TO_SYMLINK=(
-  'bash_aliases'
-  'bash_profile'
-  'bashrc'
-  'functions'
+  'fzf.zsh'
   'gitconfig'
   'gitignore'
   'gitmessage'
   'inputrc'
-  'vimrc'
-  'ideavimrc'
+  'zshrc'
+  'zsh_profile'
+  'zsh_alias'
 )
 
 # Symlink Dotfiles
@@ -81,29 +86,20 @@ for file in "${FILES_TO_SYMLINK[@]}"; do
   fi
 done
 
-unset FILES_TO_SYMLINK
+# unset FILES_TO_SYMLINK
 
-# Symlink Dotfile vim Dir
-if [ -d "${HOME}/.vim" ]; then
-  # Directory Exists, Check if Symlink
-  if [ ! -L "${HOME}/.vim" ]; then
-    # It is not a symlink, get rid of it!
-    mv "${HOME}/.vim" "${HOME}/.vim.old"
-    ln -sf "${DOTFILES}/vim" "${HOME}/.vim"
-  fi
-else
-  ln -sf "${DOTFILES}/vim" "${HOME}/.vim"
-fi
-
-# Symlink ssh_config
-mkdir -p ~/.ssh
-ln -sf "$DOTFILES"/ssh_config "$HOME"/.ssh/config
+# # Symlink Dotfile vim Dir
+# if [ -d "${HOME}/.vim" ]; then
+#   # Directory Exists, Check if Symlink
+#   if [ ! -L "${HOME}/.vim" ]; then
+#     # It is not a symlink, get rid of it!
+#     mv "${HOME}/.vim" "${HOME}/.vim.old"
+#     ln -sf "${DOTFILES}/vim" "${HOME}/.vim"
+#   fi
+# else
+#   ln -sf "${DOTFILES}/vim" "${HOME}/.vim"
+# fi
 
 
 # tmux-config
-"${DOTFILES}/tmux-config/install.sh"
-
-# pipenv typically is already installed
-# overwrite the link and reinstall to fix bash completion
-brew link --overwrite pipenv
-brew reinstall pipenv
+# "${DOTFILES}/tmux-config/install.sh"

@@ -1,5 +1,5 @@
 [core]
-	editor       = vim
+	editor       = nvim
 	preloadindex = true
 	excludesfile = ~/.gitignore
 [color]
@@ -42,7 +42,7 @@
 	default = simple
 [commit]
 	template = ~/.gitmessage
-	gpgsign = true
+	gpgsign = false 
 [credential]
 	helper = osxkeychain
 [gpg]

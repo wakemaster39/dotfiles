@@ -1,19 +1,3 @@
-
-[submodule "vim/pack/plugins/start/vim-gitgutter"]
-	path = vim/pack/plugins/start/vim-gitgutter
-	url = git@github.com:airblade/vim-gitgutter.git
 [submodule "tmux-config"]
 	path = tmux-config
 	url = git@github.com:samoshkin/tmux-config.git
-[submodule "vim/pack/plugins/start/vim-airline"]
-	path = vim/pack/plugins/start/vim-airline
-	url = git@github.com:vim-airline/vim-airline.git
-[submodule "vim/pack/plugins/start/vim-fugitive"]
-	path = vim/pack/plugins/start/vim-fugitive
-	url = git@github.com:tpope/vim-fugitive.git
-[submodule "vim/pack/plugins/start/vim-surround"]
-	path = vim/pack/plugins/start/vim-surround
-	url = git@github.com:tpope/vim-surround.git
-[submodule "vim/pack/plugins/start/black"]
-	path = vim/pack/plugins/start/black
-	url = git@github.com:ambv/black.git

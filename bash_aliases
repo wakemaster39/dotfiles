@@ -5,7 +5,8 @@ alias ...="cd ../../"
 alias ....="cd ../../../"
 
 # vim
-alias vi=vim
+alias vi=nvim
+alias vim=nvim
 
 # Sysadmin Aliases
 alias ls='ls -GF'
@@ -57,9 +58,6 @@ alias gp="git pull origin \$(git rev-parse --abbrev-ref HEAD)"
 # macOS Specific Aliases
 alias brewu="brew update && brew upgrade && brew doctor && brew cleanup"
 alias flushdns='sudo killall -HUP mDNSResponder; sudo killall mDNSResponderHelper; sudo dscacheutil -flushcache'
-
-# Load Functions
-[ -r ~/.functions ] && source ~/.functions
 
 # Load User Aliases
 [ -r ~/.bash_aliases.local ] && source ~/.bash_aliases.local
