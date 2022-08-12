@@ -1,0 +1,55 @@
+[core]
+	editor       = nvim
+	preloadindex = true
+	excludesfile = ~/.gitignore
+[color]
+	ui     = always
+	branch = auto
+	diff   = auto
+	status = auto
+[color "diff-highlight"]
+	oldNormal    = red bold
+	oldHighlight = red bold 52
+	newNormal    = green bold
+	newHighlight = green bold 22
+[color "diff"]
+	commit     = green
+	meta       = yellow
+	frag       = cyan
+	old        = red
+	new        = green
+	whitespace = red reverse
+[diff]
+	tool      = vimdiff
+	algorithm = histogram
+	compactionHeuristic = true
+[alias]
+	co    = checkout
+	graph = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
+[help]
+	autocorrect = 0
+[pager]
+	log  = /usr/local/share/git-core/contrib/diff-highlight/diff-highlight | less
+	show = /usr/local/share/git-core/contrib/diff-highlight/diff-highlight | less
+	diff = /usr/local/share/git-core/contrib/diff-highlight/diff-highlight | less
+[include]
+	path = ~/.gitconfig.local
+[pack]
+	threads = 0
+[apply]
+	whitespace = fix
+[push]
+	default = simple
+[commit]
+	template = ~/.gitmessage
+	gpgsign = false 
+[credential]
+	helper = osxkeychain
+[gpg]
+	program = /usr/local/bin/gpg
+[pull]
+	rebase = true
+[hub]
+	protocol = ssh
+[url "https://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@github.com/"]
+	insteadOf = https://github.com/

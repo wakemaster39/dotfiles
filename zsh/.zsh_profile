@@ -1,0 +1,12 @@
+export XDG_CONFIG_HOME=$HOME/.config
+VIM="nvim"
+
+# gpg
+export GPG_TTY=$(tty)
+
+# hub
+eval "$(hub alias -s)"
+
+path+=$HOME/.local/bin
+
+bindkey -s ^f "tmux-sessionizer\n"
