@@ -1,8 +1,0 @@
-export XDG_CONFIG_HOME=$HOME/.config
-VIM="nvim"
-
-# gpg
-export GPG_TTY=$(tty)
-
-# hub
-eval "$(hub alias -s)"
