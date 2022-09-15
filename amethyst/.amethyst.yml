@@ -1,0 +1,26 @@
+# Use tall and fullscreen layouts
+layouts:
+    - tall
+    - fullscreen
+    - middle-wide 
+
+# Add "command" to the default mods
+mod1:
+    - option
+    - shift
+    - command
+mod2:
+    - option
+    - shift
+    - control
+    - command
+
+# Mouse Settings
+mouse-follows-focus: true
+focus-follows-mouse: false
+mouse-resizes-windows: true
+
+# Floating Settings
+float-small-windows: true
+floating:
+  - com.apple.finder

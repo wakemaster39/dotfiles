@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# ~/.macos — https://mths.be/macos
+
+# Close any open System Preferences panes, to prevent them from overriding
+# settings we’re about to change
+
+osascript -e 'tell application "System Preferences" to quit'
+
+sudo -v
+
+# Keep-alive: update existing `sudo` time stamp until `.macos` has finished
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+
+# https://www.defaults-write.com/disable-automatically-rearrange-spaces-based-on-recent-use/
+defaults write com.apple.dock mru-spaces -bool false
+
+
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 53 '{enabled = 0; value = { parameters = (65535, 107, 8388608); type = standard; }; }'
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 55 '{enabled = 0; value = { parameters = (65535, 107, 8912896); type = standard; }; }'
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 54 '{enabled = 0; value = { parameters = (65535, 113, 8388608); type = standard; }; }'
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 56 '{enabled = 0; value = { parameters = (65535, 113, 8912896); type = standard; }; }'
+
+###############################################################################
+# Kill affected applications                                                  #
+###############################################################################
+
+for app in "Activity Monitor" \
+	"Dock" \
+	"Finder"; do
+	killall "${app}" &> /dev/null
+done
+echo "Done. Note that some of these changes require a logout/restart to take effect."

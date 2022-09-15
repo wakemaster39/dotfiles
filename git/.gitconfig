@@ -3,22 +3,23 @@
 	preloadindex = true
 	excludesfile = ~/.gitignore
 [color]
-	ui     = always
+	ui = true
 	branch = auto
 	diff   = auto
 	status = auto
 [color "diff-highlight"]
-	oldNormal    = red bold
+	oldNormal = red bold
 	oldHighlight = red bold 52
-	newNormal    = green bold
+	newNormal = green bold
 	newHighlight = green bold 22
 [color "diff"]
-	commit     = green
-	meta       = yellow
-	frag       = cyan
-	old        = red
-	new        = green
+	commit = yellow bold
+	meta = 11
+	frag = magenta bold
+	old = red bold
+	new = green bold
 	whitespace = red reverse
+	func = 146 bold
 [diff]
 	tool      = vimdiff
 	algorithm = histogram
@@ -29,9 +30,9 @@
 [help]
 	autocorrect = 0
 [pager]
-	log  = /usr/local/share/git-core/contrib/diff-highlight/diff-highlight | less
-	show = /usr/local/share/git-core/contrib/diff-highlight/diff-highlight | less
-	diff = /usr/local/share/git-core/contrib/diff-highlight/diff-highlight | less
+	log  = diff-so-fancy | less --tabs=4 -RFX
+	show = diff-so-fancy | less --tabs=4 -RFX
+	diff = diff-so-fancy | less --tabs=4 -RFX
 [include]
 	path = ~/.gitconfig.local
 [pack]
@@ -46,10 +47,18 @@
 [credential]
 	helper = osxkeychain
 [gpg]
-	program = /usr/local/bin/gpg
+	program = /opt/homebrew/bin/gpg
 [pull]
 	rebase = true
 [hub]
 	protocol = ssh
-[url "https://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@github.com/"]
+[url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[user]
+	name = Cameron Hurst 
+	email = wakemaster39@gmail.com

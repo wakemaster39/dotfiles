@@ -1,0 +1,29 @@
+{
+  "git.enableSmartCommit": true,
+  "editor.formatOnSave": true,
+  "files.autoSave": "afterDelay",
+  "[csharp]": {
+    "editor.defaultFormatter": "csharpier.csharpier-vscode"
+  },
+  "csharpier.enableDebugLogs": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "debug.onTaskErrors": "abort",
+  "editor.formatOnSaveMode": "file",
+  "omnisharp.enableRoslynAnalyzers": true,
+  "omnisharp.enableEditorConfigSupport": true,
+  "cmake.configureOnOpen": true,
+  "vim.enableNeovim": true,
+  "vscode-neovim.neovimExecutablePaths.darwin": "/opt/homebrew/bin/nvim",
+  "editor.lineNumbers": "relative"
+}

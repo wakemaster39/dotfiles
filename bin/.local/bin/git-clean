@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+git fetch
+
+if [[ $(git diff --stat) != '' ]]; then
+    echo "Git is dirty, unable to clean"
+    exit 1;
+fi
+
+current_branch=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+git_head_full=`git symbolic-ref refs/remotes/origin/HEAD`
+git_head=`echo "$git_head_full" | awk '{split($0,a,"/"); print a[4]}'`
+
+if [[ "$current_branch" != "$git_head" ]]; then
+    git checkout $git_head
+fi
+
+# Make sure everything is up to date
+UPSTREAM=${1:-'@{u}'}
+LOCAL=$(git rev-parse @)
+REMOTE=$(git rev-parse "$UPSTREAM")
+BASE=$(git merge-base @ "$UPSTREAM")
+
+if [ $LOCAL = $REMOTE ]; then
+    echo "Up-to-date"
+elif [ $LOCAL = $BASE ]; then
+    echo "Need to pull"
+    git pull
+elif [ $REMOTE = $BASE ]; then
+    echo "Need to push, clean does not handle this on HEAD"
+    exit 1;
+else
+    echo "Diverged. not sure what to do"
+    exit 1;
+fi
+
+git for-each-ref refs/heads/ "--format=%(refname:short)" | 
+while read branch; do 
+    if [[ "$branch" != "$git_head" ]]; then
+        mergeBase=$(git merge-base $git_head $branch) &&
+        [[ $(git cherry $git_head $(git commit-tree $(git rev-parse "$branch^{tree}") -p $mergeBase -m _)) == "-"* ]] &&
+        git branch -d $branch &&
+        echo "$branch has been deleted";
+    fi 
+done

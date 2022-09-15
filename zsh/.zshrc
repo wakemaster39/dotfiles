@@ -2,9 +2,11 @@
 path=('/opt/homebrew/bin' $path)
 
 # poetry
-path+='/Users/cameronhurst/Library/Python/3.9/bin'
+#path+='/Users/cameronhurst/Library/Python/3.9/bin'
+#path+='/Users/cameronhurst/.dotnet/tools'
 
 # Path to your oh-my-zsh installation.
+export LC_ALL=$LANG
 export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
@@ -20,6 +22,8 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
+# https://github.com/ohmyzsh/ohmyzsh/issues/10972
+CASE_SENSITIVE="true"
 source $ZSH/oh-my-zsh.sh
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
@@ -33,3 +37,4 @@ source $ZSH/oh-my-zsh.sh
 source ~/.zsh_profile
 source ~/.zsh_alias
 source ~/.zshrc.local
+
