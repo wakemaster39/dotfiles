@@ -1,0 +1,13 @@
+# Runtime and cache data
+debug/
+file-history/
+ide/
+plans/
+plugins/
+projects/
+session-env/
+shell-snapshots/
+statsig/
+telemetry/
+todos/
+stats-cache.json

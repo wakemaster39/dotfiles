@@ -25,5 +25,20 @@
   "cmake.configureOnOpen": true,
   "vim.enableNeovim": true,
   "vscode-neovim.neovimExecutablePaths.darwin": "/opt/homebrew/bin/nvim",
-  "editor.lineNumbers": "relative"
+  "editor.lineNumbers": "relative",
+  "omnisharp.enableDecompilationSupport": true,
+  "git.autofetch": true,
+  "[python]": {
+    "editor.formatOnType": true
+  },
+  "window.commandCenter": true,
+  "githubPullRequests.pullBranch": "never",
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
+  "git.confirmSync": false,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "dotnet.formatting.organizeImportsOnFormat": true,
+  "zenMode.hideLineNumbers": false,
+  "claudeCode.preferredLocation": "panel"
 }

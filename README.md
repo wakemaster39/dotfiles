@@ -2,12 +2,8 @@
 
 ## Disclaimer
 
-This is designed to bootstrap a clean install of macOS Sierra quickly.
+This is designed to bootstrap a clean install of macOS quickly.
 It will overwrite all the things in your homedir with symlinks!
-
-## Submodules
-
-Note: This configuration uses git submodules for plugins, please ensure that you update your submodules once you clone the repo!
 
 ## Installation
 
@@ -18,7 +14,7 @@ IMPORTANT: `cp Brewfile ../.Brewfile` if you want to customize the packages that
 git clone https://github.com/wakemaster39/dotfiles ~/.dotfiles
 
 # Install Dotfiles
-cd ~/.dotfiles && ./install.sh
+cd ~/.dotfiles && ./install
 ```
 
 If you want to adjust your macOS settings to be more sane:
@@ -26,7 +22,7 @@ If you want to adjust your macOS settings to be more sane:
 cd ~/.dotfiles && ./.macos
 ```
 
-Are you a Fan of Freedom? You may need to run in additon:
+Are you a Fan of Freedom? You may need to run in addition:
 ```
 cd ~/.dotfiles && ./freedom.sh
 ```
@@ -40,33 +36,15 @@ You do not want to have this located within the `.dotfiles` repo!
 [user]
 	name = GIT_NAME
 	email = GIT_EMAIL
-
-[github]
-	user = GITHUB_USERNAME
-	token = GITHUB_TOKEN
-```
-
-## Update Plugins
-
-IMPORTANT: If this is the first time cloning the dotfiles down...
-
-```
-git submodule init
-```
-
-```
-git submodule update --remote --merge
 ```
 
 ## Customization
 
 If you want to tweak/customize you can create a `~/.DOTFILE.local` file, this will get loaded at the end of the main file.
 
-For example, if you want to add some aliases to your setup, create a `~/.bash_aliases.local` file with all the aliases that you want.
+For example, if you want to add some aliases to your setup, create a `~/.zsh_alias.local` file with all the aliases that you want.
 
 
 ## Credits
-
-Thanks to [Smyck](http://color.smyck.org) for making a color scheme that doesn't suck.
 
 Thanks to [rvalente](https://github.com/rvalente/dotfiles/blob/master/README.md) for a base to start from

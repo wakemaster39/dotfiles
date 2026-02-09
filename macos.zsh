@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 if [[ -z $STOW_FOLDERS ]]; then
-    STOW_FOLDERS="amethyst,bin,git,tmux,vscode,zsh"
+    STOW_FOLDERS="amethyst,bin,claude,git,nvim,tmux,vscode,zsh"
 fi
 
 if [[ -z $DOTFILES ]]; then
@@ -10,7 +10,7 @@ fi
 BREWFILE="${DOTFILES}/Brewfile"
 
 if test ! "$(which brew)"; then
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
 # Turn off Homebrew Analytics; Before we do anything else!
@@ -46,3 +46,19 @@ rm -f $HOME/.zshrc
 
 
 STOW_FOLDERS=$STOW_FOLDERS DOTFILES=$DOTFILES $DOTFILES/install
+
+# Setup dotfiles notification cron jobs (idempotent — skips if already present)
+CRON_LOCAL="0 12 * * * $HOME/.local/bin/dotfiles-check-local"
+CRON_REMOTE="0 12 * * 1 $HOME/.local/bin/dotfiles-check-remote"
+EXISTING_CRON=$(crontab -l 2>/dev/null || true)
+
+if ! echo "$EXISTING_CRON" | grep -q "dotfiles-check-local"; then
+    echo "$EXISTING_CRON" | { cat; echo "$CRON_LOCAL"; } | crontab -
+    echo "Added daily dotfiles-check-local cron job"
+fi
+
+EXISTING_CRON=$(crontab -l 2>/dev/null || true)
+if ! echo "$EXISTING_CRON" | grep -q "dotfiles-check-remote"; then
+    echo "$EXISTING_CRON" | { cat; echo "$CRON_REMOTE"; } | crontab -
+    echo "Added weekly dotfiles-check-remote cron job"
+fi

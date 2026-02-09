@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# dotfiles-check-remote
+# Weekly check: fetch origin and check if we're behind
+
+set -euo pipefail
+
+DOTFILES_DIR="${HOME}/.dotfiles"
+EXPECTED_BRANCH="master"
+
+notify() {
+    local title="$1"
+    local message="$2"
+
+    if command -v terminal-notifier &>/dev/null; then
+        terminal-notifier \
+            -title "$title" \
+            -message "$message" \
+            -group "dotfiles-remote" \
+            -sound default
+    else
+        osascript -e "display notification \"$message\" with title \"$title\" sound name \"default\""
+    fi
+}
+
+cd "$DOTFILES_DIR"
+
+# Fetch latest from origin (timeout after 10s to avoid hanging)
+GIT_SSH_COMMAND="ssh -o ConnectTimeout=10" git fetch origin --quiet 2>/dev/null || exit 0
+
+if ! git rev-parse "origin/${EXPECTED_BRANCH}" &>/dev/null; then
+    exit 0
+fi
+
+local_rev=$(git rev-parse HEAD)
+remote_rev=$(git rev-parse "origin/${EXPECTED_BRANCH}")
+base_rev=$(git merge-base HEAD "origin/${EXPECTED_BRANCH}")
+
+if [[ "$local_rev" == "$remote_rev" ]]; then
+    exit 0
+elif [[ "$local_rev" == "$base_rev" ]]; then
+    behind=$(git rev-list --count "HEAD..origin/${EXPECTED_BRANCH}")
+    notify "Dotfiles Behind Remote" "Origin has $behind new commit(s). Run 'git pull' in ~/.dotfiles"
+elif [[ "$remote_rev" == "$base_rev" ]]; then
+    ahead=$(git rev-list --count "origin/${EXPECTED_BRANCH}..HEAD")
+    notify "Dotfiles Ahead of Remote" "$ahead unpushed commit(s). Run 'git push' in ~/.dotfiles"
+else
+    notify "Dotfiles Diverged" "Local and remote have diverged. Manual resolution needed in ~/.dotfiles"
+fi

@@ -17,8 +17,8 @@ alias ps='/bin/ps auxww'
 alias psg='/bin/ps auxww | grep'
 alias tf='tail -f'
 
-# Exa aliases
-alias exa="exa --git -l"
+# Eza aliases
+alias exa="eza --git -l"
 
 # alias newer programs
 alias cat='bat'

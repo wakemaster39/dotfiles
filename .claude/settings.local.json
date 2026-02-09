@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(echo:*)",
+      "Bash(stow:*)",
+      "Bash(git -C /Users/cameronhurst/.dotfiles status claude/)",
+      "Bash(git -C /Users/cameronhurst/.dotfiles log --oneline -15)",
+      "Bash(git -C /Users/cameronhurst/.dotfiles status)",
+      "Bash(terminal-notifier:*)",
+      "Bash(osascript:*)"
+    ]
+  }
+}

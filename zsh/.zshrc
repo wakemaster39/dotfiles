@@ -1,12 +1,13 @@
 # Brew Path Modification, we want brew to be first to override defaults
 path=('/opt/homebrew/bin' $path)
+path=('/opt/homebrew/opt/openssl@3/bin' $path)
+path=("$HOME/Library/Python/3.11/bin/" $path)
 
 # poetry
 #path+='/Users/cameronhurst/Library/Python/3.9/bin'
 #path+='/Users/cameronhurst/.dotnet/tools'
 
 # Path to your oh-my-zsh installation.
-export LC_ALL=$LANG
 export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will

@@ -1,45 +1,86 @@
 #!/usr/bin/env bash
 
-git fetch
+# Run git-delete-merged-branches to clean up merged branches
+git-delete-merged-branches --effort=3
+echo ""
 
-if [[ $(git diff --stat) != '' ]]; then
-    echo "Git is dirty, unable to clean"
-    exit 1;
+# Get the main branch name
+main_branch=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||')
+if [[ -z "$main_branch" ]]; then
+    echo "Could not determine main branch"
+    exit 1
 fi
 
-current_branch=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
-git_head_full=`git symbolic-ref refs/remotes/origin/HEAD`
-git_head=`echo "$git_head_full" | awk '{split($0,a,"/"); print a[4]}'`
+current_branch=$(git symbolic-ref --short HEAD 2>/dev/null || echo "DETACHED")
 
-if [[ "$current_branch" != "$git_head" ]]; then
-    git checkout $git_head
+# Build list of remaining branches (exclude main and current)
+branches=()
+while IFS= read -r branch; do
+    [[ -z "$branch" ]] && continue
+    [[ "$branch" == "$main_branch" ]] && continue
+    [[ "$branch" == "$current_branch" ]] && continue
+    branches+=("$branch")
+done < <(git for-each-ref refs/heads/ --format='%(refname:short)' --sort=-committerdate)
+
+if [[ ${#branches[@]} -eq 0 ]]; then
+    echo "No remaining branches to review"
+    exit 0
 fi
 
-# Make sure everything is up to date
-UPSTREAM=${1:-'@{u}'}
-LOCAL=$(git rev-parse @)
-REMOTE=$(git rev-parse "$UPSTREAM")
-BASE=$(git merge-base @ "$UPSTREAM")
+# Format branch lines for fzf
+branch_lines=""
+for branch in "${branches[@]}"; do
+    last_edit=$(git log -1 --format='%cr' "$branch" 2>/dev/null)
+    commit_msg=$(git log -1 --format='%s' "$branch" 2>/dev/null)
+    if [[ ${#commit_msg} -gt 50 ]]; then
+        commit_msg="${commit_msg:0:47}..."
+    fi
 
-if [ $LOCAL = $REMOTE ]; then
-    echo "Up-to-date"
-elif [ $LOCAL = $BASE ]; then
-    echo "Need to pull"
-    git pull
-elif [ $REMOTE = $BASE ]; then
-    echo "Need to push, clean does not handle this on HEAD"
-    exit 1;
-else
-    echo "Diverged. not sure what to do"
-    exit 1;
-fi
+    counts=$(git rev-list --left-right --count "origin/${main_branch}...${branch}" 2>/dev/null)
+    if [[ -n "$counts" ]]; then
+        behind=$(echo "$counts" | awk '{print $1}')
+        ahead=$(echo "$counts" | awk '{print $2}')
+        ahead_behind="+${ahead} -${behind}"
+    else
+        ahead_behind="n/a"
+    fi
 
-git for-each-ref refs/heads/ "--format=%(refname:short)" | 
-while read branch; do 
-    if [[ "$branch" != "$git_head" ]]; then
-        mergeBase=$(git merge-base $git_head $branch) &&
-        [[ $(git cherry $git_head $(git commit-tree $(git rev-parse "$branch^{tree}") -p $mergeBase -m _)) == "-"* ]] &&
-        git branch -d $branch &&
-        echo "$branch has been deleted";
-    fi 
+    line=$(printf "%-30s %-18s %-15s %s" "$branch" "$last_edit" "$ahead_behind" "$commit_msg")
+    branch_lines+="${line}"$'\n'
 done
+
+# Show interactive picker with fzf
+header="Tab to select branches to delete, Enter to confirm, Esc to skip"
+selected=$(echo -n "$branch_lines" | fzf --multi --reverse \
+    --header="$header" \
+    --preview='git log --oneline --graph -20 {1}' \
+    --preview-window=right:50% \
+    --prompt="Select branches to delete > ")
+
+if [[ -z "$selected" ]]; then
+    echo "No branches selected"
+    exit 0
+fi
+
+# Extract branch names (first column) from selected lines
+to_delete=()
+while IFS= read -r line; do
+    branch=$(echo "$line" | awk '{print $1}')
+    [[ -n "$branch" ]] && to_delete+=("$branch")
+done <<< "$selected"
+
+echo ""
+echo "Branches to delete:"
+for branch in "${to_delete[@]}"; do
+    echo "  - $branch"
+done
+echo ""
+read -rp "Delete these ${#to_delete[@]} branch(es)? [y/N] " confirm
+
+if [[ "$confirm" =~ ^[Yy]$ ]]; then
+    for branch in "${to_delete[@]}"; do
+        git branch -D "$branch" && echo "Deleted $branch"
+    done
+else
+    echo "Cancelled"
+fi

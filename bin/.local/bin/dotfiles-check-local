@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# dotfiles-check-local
+# Daily check: uncommitted changes, unpushed commits, wrong branch
+
+set -euo pipefail
+
+DOTFILES_DIR="${HOME}/.dotfiles"
+EXPECTED_BRANCH="master"
+ISSUES=()
+
+notify() {
+    local title="$1"
+    local message="$2"
+
+    if command -v terminal-notifier &>/dev/null; then
+        terminal-notifier \
+            -title "$title" \
+            -message "$message" \
+            -group "dotfiles-local" \
+            -sound default
+    else
+        osascript -e "display notification \"$message\" with title \"$title\" sound name \"default\""
+    fi
+}
+
+cd "$DOTFILES_DIR"
+
+# Check current branch
+current_branch=$(git symbolic-ref --short HEAD 2>/dev/null || echo "DETACHED")
+if [[ "$current_branch" != "$EXPECTED_BRANCH" ]]; then
+    ISSUES+=("On branch '$current_branch' (expected '$EXPECTED_BRANCH')")
+fi
+
+# Check for uncommitted changes (staged + unstaged + untracked)
+if [[ -n "$(git status --porcelain)" ]]; then
+    ISSUES+=("Uncommitted changes detected")
+fi
+
+# Check for unpushed commits
+ahead=$(git rev-list --count "origin/${EXPECTED_BRANCH}..HEAD" 2>/dev/null || echo "0")
+if [[ "$ahead" -gt 0 ]]; then
+    ISSUES+=("$ahead unpushed commit(s)")
+fi
+
+# Send notification if issues found
+if [[ ${#ISSUES[@]} -gt 0 ]]; then
+    message=$(printf '%s; ' "${ISSUES[@]}")
+    notify "Dotfiles Need Attention" "${message%; }"
+fi
