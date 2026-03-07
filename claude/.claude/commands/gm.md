@@ -4,9 +4,11 @@ Generate a commit message following the Conventional Commits specification (http
 
 ## Instructions
 
-1. First, run `git diff --staged` to see what changes are staged for commit
-2. If no changes are staged, automatically stage all modified files using `git add -u` (tracked files only), then run `git diff --staged` again
-3. Analyze the staged changes and generate a commit message
+1. First, run `git status` and show the output so the user can see what files are staged, modified, and untracked
+2. Run `git diff --staged` to see what changes are staged for commit
+3. If no changes are staged, automatically stage all modified files using `git add -u` (tracked files only), then run `git status` and `git diff --staged` again
+4. If there are untracked files shown by `git status`, explicitly call them out to the user so they can decide whether to include them
+5. Analyze the staged changes and generate a commit message
 
 ## Conventional Commits Format
 

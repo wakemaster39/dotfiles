@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# npm-globals-check
+# Weekly check (Monday): verify required npm globals are installed and up to date
+
+set -euo pipefail
+
+REQUIRED_PACKAGES=("aws-cdk" "prettier")
+ISSUES=()
+
+notify() {
+    local title="$1"
+    local message="$2"
+
+    if command -v terminal-notifier &>/dev/null; then
+        terminal-notifier \
+            -title "$title" \
+            -message "$message" \
+            -group "npm-globals" \
+            -sound default
+    else
+        osascript -e "display notification \"$message\" with title \"$title\" sound name \"default\""
+    fi
+}
+
+# Ensure npm is available
+if ! command -v npm &>/dev/null; then
+    notify "NPM Globals Check" "npm not found on PATH"
+    exit 0
+fi
+
+for pkg in "${REQUIRED_PACKAGES[@]}"; do
+    # Check if installed
+    installed_version=$(npm list -g --depth=0 "$pkg" 2>/dev/null | grep "$pkg@" | sed 's/.*@//' || true)
+
+    if [[ -z "$installed_version" ]]; then
+        ISSUES+=("$pkg is not installed (run: npm i -g $pkg)")
+        continue
+    fi
+
+    # Check for updates
+    latest_version=$(npm view "$pkg" version 2>/dev/null || true)
+
+    if [[ -n "$latest_version" && "$installed_version" != "$latest_version" ]]; then
+        ISSUES+=("$pkg $installed_version → $latest_version available")
+    fi
+done
+
+if [[ ${#ISSUES[@]} -gt 0 ]]; then
+    message=$(printf '%s; ' "${ISSUES[@]}")
+    notify "NPM Globals Need Attention" "${message%; }"
+fi

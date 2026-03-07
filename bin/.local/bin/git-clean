@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-# Run git-delete-merged-branches to clean up merged branches
-git-delete-merged-branches --effort=3
-echo ""
+# Prune stale worktree refs
+git worktree prune 2>/dev/null
+
+# Run git-delete-merged-branches (skip in bare repos — it requires a work tree)
+if [[ "$(git rev-parse --is-bare-repository 2>/dev/null)" != "true" ]]; then
+    git-delete-merged-branches --effort=3
+    echo ""
+fi
 
 # Get the main branch name
 main_branch=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||')
@@ -13,12 +19,31 @@ fi
 
 current_branch=$(git symbolic-ref --short HEAD 2>/dev/null || echo "DETACHED")
 
+# Build worktree branch → path map
+declare -A worktree_map
+wt_path=""
+while IFS= read -r line; do
+    if [[ "$line" =~ ^worktree\ (.+) ]]; then
+        wt_path="${BASH_REMATCH[1]}"
+    elif [[ "$line" =~ ^branch\ refs/heads/(.+) ]]; then
+        worktree_map["${BASH_REMATCH[1]}"]="$wt_path"
+    elif [[ -z "$line" ]]; then
+        wt_path=""
+    fi
+done < <(git worktree list --porcelain 2>/dev/null)
+
+is_bare=$(git rev-parse --is-bare-repository 2>/dev/null)
+
 # Build list of remaining branches (exclude main and current)
+# In bare repos, only show branches with worktrees (others are just dangling refs)
 branches=()
 while IFS= read -r branch; do
     [[ -z "$branch" ]] && continue
     [[ "$branch" == "$main_branch" ]] && continue
     [[ "$branch" == "$current_branch" ]] && continue
+    if [[ "$is_bare" == "true" ]] && [[ -z "${worktree_map[$branch]:-}" ]]; then
+        continue
+    fi
     branches+=("$branch")
 done < <(git for-each-ref refs/heads/ --format='%(refname:short)' --sort=-committerdate)
 
@@ -45,7 +70,12 @@ for branch in "${branches[@]}"; do
         ahead_behind="n/a"
     fi
 
-    line=$(printf "%-30s %-18s %-15s %s" "$branch" "$last_edit" "$ahead_behind" "$commit_msg")
+    wt_tag=""
+    if [[ -n "${worktree_map[$branch]:-}" ]]; then
+        wt_tag="[wt] "
+    fi
+
+    line=$(printf "%-30s %-6s%-18s %-15s %s" "$branch" "$wt_tag" "$last_edit" "$ahead_behind" "$commit_msg")
     branch_lines+="${line}"$'\n'
 done
 
@@ -72,14 +102,23 @@ done <<< "$selected"
 echo ""
 echo "Branches to delete:"
 for branch in "${to_delete[@]}"; do
-    echo "  - $branch"
+    wt_path="${worktree_map[$branch]:-}"
+    if [[ -n "$wt_path" ]]; then
+        echo "  - $branch (worktree: $wt_path)"
+    else
+        echo "  - $branch"
+    fi
 done
 echo ""
 read -rp "Delete these ${#to_delete[@]} branch(es)? [y/N] " confirm
 
 if [[ "$confirm" =~ ^[Yy]$ ]]; then
     for branch in "${to_delete[@]}"; do
-        git branch -D "$branch" && echo "Deleted $branch"
+        wt_path="${worktree_map[$branch]:-}"
+        if [[ -n "$wt_path" ]]; then
+            git worktree remove "$wt_path" --force && echo "Removed worktree $wt_path"
+        fi
+        git branch -D "$branch" && echo "Deleted branch $branch"
     done
 else
     echo "Cancelled"

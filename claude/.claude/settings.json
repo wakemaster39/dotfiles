@@ -1,16 +1,21 @@
 {
   "attribution": {
-    "commit": "",
-    "pr": ""
+    "commit": "Co-Authored-By: Claude <noreply@anthropic.com>",
+    "pr": "Generated with Claude Code"
   },
   "permissions": {
     "allow": [
       "Bash(find:*)",
       "Bash(tree:*)",
-      "Bash(dotnet:*)"
+      "Bash(dotnet:*)",
+      "Bash(/usr/bin/git -C /Users/cameronhurst/work/capybara-bare/lsp2 status --short)",
+      "Bash(gh pr view:*)",
+      "Read(//Users/cameronhurst/.claude/skills/**)",
+      "Read(//Users/cameronhurst/.claude/**)"
     ]
   },
   "enabledPlugins": {
-    "agent-sdk-dev@claude-plugins-official": true
+    "agent-sdk-dev@claude-plugins-official": true,
+    "ralph-loop@claude-plugins-official": true
   }
 }

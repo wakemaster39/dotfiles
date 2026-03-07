@@ -1,11 +1,10 @@
 # Brew Path Modification, we want brew to be first to override defaults
 path=('/opt/homebrew/bin' $path)
 path=('/opt/homebrew/opt/openssl@3/bin' $path)
-path=("$HOME/Library/Python/3.11/bin/" $path)
-
-# poetry
-#path+='/Users/cameronhurst/Library/Python/3.9/bin'
-#path+='/Users/cameronhurst/.dotnet/tools'
+# poetry (installed via pyenv global python, NOT homebrew python)
+# The poetry installer puts its binary in ~/.local/bin which is added in .zsh_profile
+# Do NOT add the poetry venv/bin to PATH — it contains a python3 binary that
+# breaks when the Python it was built against gets upgraded by brew.
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -39,3 +38,4 @@ source ~/.zsh_profile
 source ~/.zsh_alias
 source ~/.zshrc.local
 
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"

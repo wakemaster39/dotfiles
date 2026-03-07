@@ -3,20 +3,20 @@
   "editor.formatOnSave": true,
   "files.autoSave": "afterDelay",
   "[csharp]": {
-    "editor.defaultFormatter": "csharpier.csharpier-vscode"
+    "editor.defaultFormatter": "csharpier.csharpier-vscode",
   },
   "csharpier.enableDebugLogs": true,
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "debug.onTaskErrors": "abort",
   "editor.formatOnSaveMode": "file",
@@ -29,16 +29,16 @@
   "omnisharp.enableDecompilationSupport": true,
   "git.autofetch": true,
   "[python]": {
-    "editor.formatOnType": true
+    "editor.formatOnType": true,
   },
   "window.commandCenter": true,
   "githubPullRequests.pullBranch": "never",
   "extensions.experimental.affinity": {
-    "asvetliakov.vscode-neovim": 1
+    "asvetliakov.vscode-neovim": 1,
   },
   "git.confirmSync": false,
   "diffEditor.ignoreTrimWhitespace": false,
   "dotnet.formatting.organizeImportsOnFormat": true,
   "zenMode.hideLineNumbers": false,
-  "claudeCode.preferredLocation": "panel"
+  "claudeCode.preferredLocation": "panel",
 }
