@@ -1,5 +1,4 @@
 export XDG_CONFIG_HOME=$HOME/.config
-export ARIADNE_HOME="$HOME/agent"
 VIM="nvim"
 
 # gpg

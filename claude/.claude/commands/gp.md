@@ -63,6 +63,30 @@ Commit changes with the provided message and push to the remote repository.
     - The PR as a clickable markdown link: `[#<number>](<url>)` (whether existing or newly created)
     - Any relevant output or errors
 
+## Ariadne Integration
+
+After a successful push (whether or not a PR was created), check if there's an active Ariadne work item for the current branch. This links artifacts so the workflow state machine tracks progress.
+
+1. **Get the current branch and repo**:
+   ```bash
+   branch=$(git rev-parse --abbrev-ref HEAD)
+   repo=$(basename "$(git rev-parse --show-toplevel)")
+   ```
+
+2. **Check for an active work item** matching this repo:
+   ```bash
+   ariadne list 2>/dev/null
+   ```
+   Look for a work item whose `Repo` matches the current repo name. If found, note its ID.
+
+3. **If a PR was just created** and a matching work item exists:
+   ```bash
+   ariadne link-pr <id> <repo>#<pr-number>
+   ```
+   This auto-advances the work item to `PrOpen` if it's in an earlier phase.
+
+4. If no work item matches, skip silently — ariadne integration is optional.
+
 ## Important
 
 - NEVER skip pre-commit hooks (no --no-verify flag)
